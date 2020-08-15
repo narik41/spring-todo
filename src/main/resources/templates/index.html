@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+	 <head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		
+		<title>To Do Items</title>
+	 </head>
+	<body>
+		<div class="jumbotron"></div>
+		<div th:if="${message}">
+			<div th:if="${message}" class="alert alert-info">
+				<p th:text="${message}"></p>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-8">
+					<div class="card">
+						<div class="card-header">
+						    Todo Items List
+						</div>
+						<div class="card-body">
+							<div th:switch="${todos}">
+						<h2 th:case="null">No Items</h2>
+						 
+						<div th:case="*">
+							<table class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<td>S.n</td>
+										<td>Task</td>
+										<td>Is Done </td>
+										<td>Action</td>
+									</tr>
+								</thead>
+								
+								<tbody>
+									 <tr th:each="todo : ${todos}">
+									 	
+									 	<td>#</td>
+									 	<td th:text="${todo.name}"></td>
+									 	<td>
+									 		<span th:if="${todo.isDone}" class="badge badge-info">Completed</span>
+									 		<span th:unless="${todo.isDone}" class="badge badge-secondary">On progress</span>
+									 	</td>
+									 	<td>
+									 		<a class="btn btn-primary btn-sm" th:href="@{/todo/edit/{id}(id=${todo.id})}">Edit</a>
+									 		<a th:data-href="@{/todo/delete/{id}(id=${todo.id})}" data-toggle="modal" data-target="#deleteModel"  class="btn btn-danger btn-sm">Delete</a>
+									 	</td>
+									 </tr>
+								</tbody>
+							</table>
+						</div>
+					</div>	
+						</div>
+					</div>				
+				</div>
+				
+				<div class="col-4">
+					<div class="card">
+						<div class="card-header">
+						    Add ToDo Items
+						</div>
+						<div class="card-body">
+							<div th:if="${todoItem}">
+								<form   th:action="@{/todo/update/{id}(id=todoItem.id)}" method="POST">
+									<div class="form-group">
+										<label for="todoItems">Todo Items</label>
+										 
+										<input autofocus th:value="${todoItem.name}" type="text" name="name" placeholder="Todo Item"   class="form-control form-control-sm" id="todoItems" />
+									</div>
+						  
+						  			<button type="submit" class="btn btn-primary btn-sm float-right">Submit</button>
+								</form>
+								
+							</div>
+							
+							<div th:unless="${todoItem}">
+								<form   th:action="@{/todo}" method="POST">
+									<div class="form-group">
+										<label for="todoItems">Todo Items</label>
+										<input type="text" name="name" placeholder="Todo Item"  class="form-control form-control-sm" id="todoItems" />
+									</div>
+						  
+						  			<button type="submit" class="btn btn-primary btn-sm float-right">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="deleteModel" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="deleteModelLabel">New message</h5>
+		                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		                <span aria-hidden="true">&times;</span>
+		                </button>
+		            </div>
+		            <div class="modal-body">
+		                <form>
+		                <div class="form-group">
+		                    <label for="recipient-name" class="col-form-label">Recipient:</label>
+		                    <input type="text" class="form-control" id="recipient-name">
+		                </div>
+		                <div class="form-group">
+		                    <label for="message-text" class="col-form-label">Message:</label>
+		                    <textarea class="form-control" id="message-text"></textarea>
+		                </div>
+		                </form>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		                <button type="button" class="btn btn-primary">Send message</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+  	</body>
+</html>
